@@ -81,7 +81,7 @@ requirement_agent: Agent = Agent(name="Requirement Agent",
 async def call_agent()-> str:
 
 
-    result = Runner.run_streamed(starting_agent=requirement_gathering_agent, 
+    result = Runner.run_streamed(starting_agent=requirement_agent, 
                                 input=user_input,
                                 context=fetch_user_profile(),
                                 )
