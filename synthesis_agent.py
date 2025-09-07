@@ -151,6 +151,7 @@ def dynamic_instructions(context: RunContextWrapper, result: str) -> str:
     - Gather key insights from all the team members.
     - Ensure all facts are verified and cited properly.
     - Highlight any disagreements or uncertainties in the findings.
+    - add the inline citations [n] and references in the your output.
     """
 
 
