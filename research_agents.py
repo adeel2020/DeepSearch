@@ -2,7 +2,6 @@ import os
 from dotenv import load_dotenv, find_dotenv
 from agents import Agent, Runner, AsyncOpenAI, ModelSettings, OpenAIChatCompletionsModel, RunContextWrapper, ModelSettings, ItemHelpers, ToolsToFinalOutputFunction
 from agents.tool import function_tool
-from agents.tool_context import ToolContext
 import asyncio
 from dataclasses import dataclass
 from tavily import AsyncTavilyClient
@@ -10,7 +9,6 @@ from typing import Literal
 from openai import AsyncOpenAI
 from typing import List, Optional, Any
 from agents.extensions.handoff_prompt import RECOMMENDED_PROMPT_PREFIX
-from synthesis_agent import sythesis_agent
 import re, json
 from enum import Enum
 

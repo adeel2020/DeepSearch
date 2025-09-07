@@ -7,7 +7,6 @@ from agents.tool import function_tool
 from research_agents import web_search_agent
 from synthesis_agent import sythesis_agent
 from report_writer import report_writer_agent
-
 from dataclasses import dataclass
 from tavily import AsyncTavilyClient
 from typing import Optional
@@ -37,14 +36,14 @@ llm_model: OpenAIChatCompletionsModel = OpenAIChatCompletionsModel(
     openai_client=external_client,
     )
 
+
+
 @dataclass
 class StructuredResponse:
     industry: str                   # e.g., "telco", "finance", "healthcare", "retail"
     technology: Optional[str] = None     # e.g., "churn analysis", "fraud detection", "core KPIs"
     intent: Optional[str] = None 
     research_results: str  = None # e.g., "troubleshooting", "benchmarking", "strategy"
-
-
 
 lead_research_agent: Agent = Agent(name="LeadResearchAgent", 
                             instructions="""
@@ -55,9 +54,9 @@ lead_research_agent: Agent = Agent(name="LeadResearchAgent",
 
                             Step 1. Assign the deep research task to web search agent and Collect the research work before assigning it to synthesis agent. 
                             Step 2. Assign the synthesis task to synthesis agent to combine the research work into organized insights.
-                            Step 3. Assign the writing task to report writer agent to write a detailed and comprehensive professional report with inline citations and references.
+                            Step 3. Assign the writing task to report writer agent to write a detailed and comprehensive professional report based on the feedback from synthesis agent.
 
-                            Always reflect on the output of writer to ensure if follows the instruction at Step 3 before providing the final output to user.""",
+                            Always reflect on the output of writer to avoid hallucination before providing the final output to user.""",
                             model=llm_model,
                             # handoffs=[web_search_agent, report_writer_agent],
                           tools=[
@@ -73,8 +72,7 @@ lead_research_agent: Agent = Agent(name="LeadResearchAgent",
                           )
 
 
-
-
+        
 
 
         
