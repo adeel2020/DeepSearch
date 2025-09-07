@@ -32,18 +32,9 @@ external_client: AsyncOpenAI = AsyncOpenAI(
     base_url="https://generativelanguage.googleapis.com/v1beta/openai/",
 )
 llm_model: OpenAIChatCompletionsModel = OpenAIChatCompletionsModel(
-    model="gemini-2.5-flash", 
+    model="gemini-2.5-pro", 
     openai_client=external_client,
     )
-
-
-
-@dataclass
-class StructuredResponse:
-    industry: str                   # e.g., "telco", "finance", "healthcare", "retail"
-    technology: Optional[str] = None     # e.g., "churn analysis", "fraud detection", "core KPIs"
-    intent: Optional[str] = None 
-    research_results: str  = None # e.g., "troubleshooting", "benchmarking", "strategy"
 
 lead_research_agent: Agent = Agent(name="LeadResearchAgent", 
                             instructions="""
