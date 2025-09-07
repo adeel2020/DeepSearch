@@ -192,5 +192,3 @@ sythesis_agent.tools.append(source_checker_agent.as_tool(
     tool_name="SourceCheckerAgent",
     tool_description="Use this agent to assess the credibility of sources and provide a reliability rating.",))
 
-
-print(f"\n\n [web search_agent]: {sythesis_agent.tools}, Tools: {[tool.name for tool in sythesis_agent.tools]}")

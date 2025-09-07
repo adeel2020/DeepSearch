@@ -44,33 +44,35 @@ def fetch_user_profile() -> UserProfile:
         research_preferences=["AI use cases"]
     )
 
-planning_agent: Agent = Agent(name="PlanningAgent", 
-                          model=special_model,
-                          instructions="You are a planning assistant to generate the plan for the research topic before passing it to the lead research agent.",
-                          handoffs=[lead_research_agent],
-                          model_settings=ModelSettings(temperature=0.7, max_tokens=1000, max_tool_calls=1)
-)
-
-
-
 @function_tool
 async def ask_user(context: RunContextWrapper, question: str) -> str:
+    """
+    Tool to ask user for more information if needed."""
     print(question)
     response = input("Your response: ").strip()
     if response.lower() == 'quit':
         return  # Exit the loop if the user types 'quit'
-    else: response.append(user_input)
+    else: lines.append(response)
     if not response:
         return "User did not provide input."
     return response
 
+
+planning_agent: Agent = Agent(name="PlanningAgent", 
+                          model=special_model,
+                          instructions="You are a planning assistant to generate the plan.",
+                          handoffs=[lead_research_agent],
+                          handoff_description="Make sure you generate plan based on user requirements, before passing it to the lead research agent",
+                          model_settings=ModelSettings(temperature=0.7, max_tokens=1000)
+)
+
 requirement_gathering_agent: Agent = Agent(name="RequirementGatheringAgent", 
                           model=llm_model,
-                          instructions="You are a requirement gathering agent that collects user requirements. Ask the user for clarify using ask_user tool call.",
+                          instructions="You are a requirement gathering agent that collects requirements from the user using ask_user tool call",
                           handoffs=[planning_agent],
+                          handoff_description="Forward the requirements to the planning agent for further processing.",
                           tools=[ask_user],
-                          model_settings=ModelSettings(temperature=0.1, max_tokens=1000, max_tool_calls=1),
-
+                          model_settings=ModelSettings(temperature=0.3, tool_choice="required", max_tokens=1000)
 )
 
 
@@ -79,7 +81,7 @@ async def call_agent()-> str:
 
     result = Runner.run_streamed(starting_agent=requirement_gathering_agent, 
                                 input=user_input,
-                                context=fetch_user_profile()
+                                context=fetch_user_profile(),
                                 )
     async for event in result.stream_events():
         
