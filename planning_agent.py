@@ -62,15 +62,15 @@ async def ask_user(context: RunContextWrapper, question: str) -> str:
 
 planning_agent: Agent = Agent(name="PlanningAgent", 
                           model=special_model,
-                          instructions="You are a planning assistant to generate the plan. Provide the plan based on user requirements in your output",
+                          instructions="You are a planning assistant to generate the plan. Provide the plan based on user requirements in your output to lead research agent",
                           handoffs=[lead_research_agent],
                           handoff_description="Make sure you generate plan based on user requirements, before passing it to the lead research agent",
                           model_settings=ModelSettings(temperature=0.7)
 )
 
-requirement_gathering_agent: Agent = Agent(name="RequirementGatheringAgent", 
+requirement_agent: Agent = Agent(name="Requirement Agent", 
                           model=llm_model,
-                          instructions="You are a requirement gathering agent that collects requirements from the user using ask_user tool call",
+                          instructions="You are a requirement agent that gathers the additional requirements before sending to the planning agent",
                           handoffs=[planning_agent],
                           handoff_description="Forward the requirements to the planning agent for further processing.",
                           tools=[ask_user],
