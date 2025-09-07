@@ -51,11 +51,11 @@ async def ask_user(context: RunContextWrapper, question: str) -> str:
     Returns the user's feedback for the question asked.
     """
     print(f"Agent asks: {question}")
-    response = await input("Your response: ").strip()
+    response = input("Your response: ").strip()
 
-    if response.lower() == 'quit':
+    if user_input.lower() == 'quit':
             return "procee without further questions"
-    else: lines.append(response)
+    else: lines.append(user_input)
 
     return response
 
