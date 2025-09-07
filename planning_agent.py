@@ -47,23 +47,25 @@ def fetch_user_profile() -> UserProfile:
 @function_tool
 async def ask_user(context: RunContextWrapper, question: str) -> str:
     """
-    Tool to ask user for more information if needed."""
-    print(question)
-    response = input("Your response: ").strip()
+    Ask the user for more information if needed.
+    Returns the user's feedback for the question asked.
+    """
+    print(f"Agent asks: {question}")
+    response = await input("Your response: ").strip()
+
     if response.lower() == 'quit':
-        return  # Exit the loop if the user types 'quit'
-    else: question.append(response)
-    if not question:
-        return "User did not provide input."
-    return question
+            return "procee without further questions"
+    else: lines.append(response)
+
+    return response
 
 
 planning_agent: Agent = Agent(name="PlanningAgent", 
                           model=special_model,
-                          instructions="You are a planning assistant to generate the plan. Provide the plan for user requirements in your output",
+                          instructions="You are a planning assistant to generate the plan. Provide the plan based on user requirements in your output",
                           handoffs=[lead_research_agent],
                           handoff_description="Make sure you generate plan based on user requirements, before passing it to the lead research agent",
-                          model_settings=ModelSettings(temperature=0.7, max_tokens=1000)
+                          model_settings=ModelSettings(temperature=0.7)
 )
 
 requirement_gathering_agent: Agent = Agent(name="RequirementGatheringAgent", 
@@ -72,7 +74,7 @@ requirement_gathering_agent: Agent = Agent(name="RequirementGatheringAgent",
                           handoffs=[planning_agent],
                           handoff_description="Forward the requirements to the planning agent for further processing.",
                           tools=[ask_user],
-                          model_settings=ModelSettings(temperature=0.3, tool_choice="required", max_tokens=1000)
+                          model_settings=ModelSettings(temperature=0.2),
 )
 
 
@@ -109,10 +111,10 @@ async def call_agent()-> str:
                 pass  # Ignore other event types
  
     # # ✅ Extract string from agent's result (depends on the SDK version)
-    # output = result.final_output
+    output = result.final_output
     # print("\n\n [Agent Response]: ", result.final_output)
     # # ✅ Make sure it's a string (print it to check format)
-    # print("\nAgent Output:\n", output)
+    print("\nDeep Search System Output:\n\n", output)
     return result.last_agent.name
 
 

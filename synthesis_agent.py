@@ -43,32 +43,8 @@ async def build_cited_content(wrapper: RunContextWrapper, result: str) -> str:
     and a References section at the end.
  
     """
-
-    if isinstance(result, str):
-        try:
-            result = json.loads(result)
-        except json.JSONDecodeError:
-            return "Invalid result format (expected JSON)."
-    
-    urls: List[str] = [item.get("url", "") for item in result.get("results", [])]
-    contents: List[str] = [clean_text(item.get("content", "")) for item in result.get("results", [])]
-
-    # Inline citations
-    cited_content_parts = []
-    for idx, content in enumerate(contents, start=1):
-        if content:  # skip empty entries
-            cited_content_parts.append(f"{content} [{idx}]")
-
-    cited_content = "\n\n".join(cited_content_parts)
-
-    # References section
-    references = "\n".join([f"[{i+1}] {url}" for i, url in enumerate(urls) if url])
-
-    final_output = f"{cited_content}\n\nReferences:\n{references}" if cited_content else "No relevant content found."
-
-    # print(final_output)  # optional for debugging
-    return final_output
-
+    return f"{wrapper.context} + {result}"
+  
 
 class Reliability(str, Enum):
     HIGH = "High"

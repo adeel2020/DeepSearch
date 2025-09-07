@@ -46,6 +46,7 @@ lead_research_agent: Agent = Agent(name="LeadResearchAgent",
                             Step 1. Assign the deep research task to web search agent and Collect the research work before assigning it to synthesis agent. 
                             Step 2. Assign the synthesis task to synthesis agent to combine the research work into organized insights.
                             Step 3. Assign the writing task to report writer agent to write a detailed and comprehensive professional report based on the feedback from synthesis agent.
+                            Step 4. Inline citation and reference are included in the report writer agent's response
 
                             Always reflect on the output of writer to avoid hallucination before providing the final output to user.""",
                             model=llm_model,
