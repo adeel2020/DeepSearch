@@ -1,6 +1,24 @@
 # DeepResearchAgent
 
-DeepResearchAgent is an AI-powered research orchestration system that automates deep research, fact-checking, and professional report writing using advanced LLMs (Gemini, OpenAI) and web search APIs. It uses a modular, agent-based architecture to break down complex research tasks into specialized steps, ensuring high-quality, cited, and well-structured outputs.
+## Project Logic Overview
+
+DeepResearchAgent is a modular, agent-based AI system for automated, high-quality research and report generation. The workflow is orchestrated by specialized agents, each with clear responsibilities and handoffs, as described in the code's docstrings and agent instructions:
+
+- **Requirement Gathering:** The RequirementGatheringAgent interacts with the user to clarify and collect research requirements, using interactive prompts if needed.
+- **Planning:** The PlanningAgent generates a step-by-step plan based on user requirements before passing control to the main research workflow.
+- **Orchestration:** The LeadResearchAgent manages the research process, delegating tasks to:
+  - WebSearchAgent for deep, multi-perspective web research
+  - SythesisAgent for fact-checking, citation, and source reliability assessment
+  - ReportWriterAgent for professional, structured report writing
+- **Synthesis & Verification:** The SythesisAgent coordinates fact-finding, citation, and source-checking sub-agents. It ensures all facts are verified, cited, and any disagreements or uncertainties are clearly highlighted.
+- **Report Writing:** The ReportWriterAgent produces a comprehensive, well-structured, and cited report, using a formal and professional style.
+- **Personalization:** User profiles are used to tailor research instructions and examples.
+
+The system emphasizes reliability, transparency, and clarity by:
+- Spawning multiple searches for deep research
+- Highlighting source reliability (High/Medium/Low)
+- Detecting and reporting conflicting information between sources
+- Providing inline citations and references in all outputs
 
 ---
 
@@ -24,7 +42,7 @@ research_agents.py           # Web search, fact-checking, and source quality age
 synthesis_agent.py           # Synthesis and citation agents
 report_writer.py             # Professional report writing agent
 .env                         # API keys and environment variables
-pyproject.toml / requirements.txt  # Project dependencies
+pyproject.toml / uv.lock     # Project dependencies (managed by uv)
 ```
 
 ---
@@ -37,17 +55,18 @@ pyproject.toml / requirements.txt  # Project dependencies
    cd DeepResearchAgent
    ```
 
-2. **Set up Python environment:**
+2. **Install [uv](https://github.com/astral-sh/uv):**
    ```sh
-   python3.12 -m venv .venv
-   source .venv/bin/activate
+   pip install uv
+   # or, for Homebrew users:
+   brew install uv
    ```
 
-3. **Install dependencies:**
+3. **Install dependencies with uv:**
    ```sh
-   pip install -r requirements.txt
-   # or, if using poetry:
-   poetry install
+   uv pip install -r requirements.txt
+   # or, if you prefer, use:
+   uv pip install .
    ```
 
 4. **Configure API keys:**
@@ -60,23 +79,23 @@ pyproject.toml / requirements.txt  # Project dependencies
 ### Run the Full Research System
 
 ```sh
-python planning_agent.py
+uv run planning_agent.py
 ```
 - This will prompt you for a research topic and guide you through the full workflow: requirement gathering, planning, research, synthesis, and report writing.
 
 ### Run Standalone Agents
 
 - **Web Search Agent:**  
-  ```sh 
-  python research_agents.py
+  ```sh
+  uv run research_agents.py
   ```
 - **Synthesis Agent:**  
   ```sh
-  python synthesis_agent.py
+  uv run synthesis_agent.py
   ```
 - **Report Writer:**  
   ```sh
-  python report_writer.py
+  uv run report_writer.py
   ```
 
 ---
@@ -94,10 +113,13 @@ python planning_agent.py
 - **Python Version:**  
   Requires Python 3.12 or higher.
 
+- **Dependency Management:**  
+  This project uses [uv](https://github.com/astral-sh/uv) for fast, reliable Python package management. All commands should use `uv` instead of `pip` or `venv`.
+
 ---
 
 ## Dependencies
-
+- [uv](https://github.com/astral-sh/uv)
 - [openai-agents](https://pypi.org/project/openai-agents/)
 - [tavily-python](https://pypi.org/project/tavily-python/)
 - [python-dotenv](https://pypi.org/project/python-dotenv/)
