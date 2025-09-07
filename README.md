@@ -67,7 +67,7 @@ python planning_agent.py
 ### Run Standalone Agents
 
 - **Web Search Agent:**  
-  ```sh
+  ```sh 
   python research_agents.py
   ```
 - **Synthesis Agent:**  

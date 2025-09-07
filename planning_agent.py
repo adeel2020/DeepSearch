@@ -52,15 +52,15 @@ async def ask_user(context: RunContextWrapper, question: str) -> str:
     response = input("Your response: ").strip()
     if response.lower() == 'quit':
         return  # Exit the loop if the user types 'quit'
-    else: lines.append(response)
-    if not response:
+    else: question.append(response)
+    if not question:
         return "User did not provide input."
-    return response
+    return question
 
 
 planning_agent: Agent = Agent(name="PlanningAgent", 
                           model=special_model,
-                          instructions="You are a planning assistant to generate the plan.",
+                          instructions="You are a planning assistant to generate the plan. Provide the plan for user requirements in your output",
                           handoffs=[lead_research_agent],
                           handoff_description="Make sure you generate plan based on user requirements, before passing it to the lead research agent",
                           model_settings=ModelSettings(temperature=0.7, max_tokens=1000)
